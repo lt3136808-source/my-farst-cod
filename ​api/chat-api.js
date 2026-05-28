@@ -1,3 +1,24 @@
+// ==========================================
+// نظام التعريف التلقائي للمفاتيح (Auto-Detection)
+// ==========================================
+require('dotenv').config();
+const GOOGLE_KEY = process.env.GEMINI_API_KEY;
+const GROQ_KEY = process.env.GROQ_KEY;
+const GITHUB_KEY = process.env.GITHUB_KEY;
+const OPENROUTER_KEY = process.env.OPENROUTER_KEY;
+const FALLBACK_MODELS = ["meta-llama/llama-3-8b-instruct", "google/gemma-7b-it"];
+const headers = { 'Access-Control-Allow-Origin': '*' };
+const moderate = (text) => text; // دالة للتنقية (توسع حسب الحاجة)
+const fetchWithTimeout = (url, options, timeout = 15000) => {
+    return Promise.race([
+        fetch(url, options).then(res => res.json()),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('AbortError')), timeout))
+    ]);
+};
+
+// ==========================================
+// تابع الآن كودك كما هو تماماً..
+// ==========================================
 // =========================================================================
 // Nexus AI PRO Backend - v100 Cosmic (Dynamic Envs, Media, Moderation, Fallbacks)
 // المسار: api/chat-api.js 
