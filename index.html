@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Nexus AI PRO - Ultimate V100</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+
+  <style>
+    :root { --safe-bottom: env(safe-area-inset-bottom, 10px); }
+    html, body { margin: 0; padding: 0; width: 100vw; height: 100dvh; background: #030305; color: #fff; font-family: 'Cairo', sans-serif; overflow: hidden; display: flex; flex-direction: column; }
+    
+    .edge-lighting { position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 9999; box-shadow: inset 0 0 20px 5px rgba(255, 69, 0, 0.7); animation: fireBorder 4s infinite alternate; }
+    .edge-lighting.intense { box-shadow: inset 0 0 70px 30px rgba(0, 255, 255, 0.9), inset 0 0 20px 10px rgba(255, 0, 255, 0.8) !important; animation: intensePulse 0.3s infinite alternate !important; }
+    @keyframes fireBorder { 0% { box-shadow: inset 0 0 20px 5px rgba(255,0,0,0.8); } 50% { box-shadow: inset 0 0 25px 10px rgba(138,43,226,0.8); } 100% { box-shadow: inset 0 0 20px 5px rgba(0,250,154,0.8); } }
+    @keyframes intensePulse { 0% { opacity: 0.8; } 100% { opacity: 1; } }
+
+    .glass-panel { background: rgba(10, 10, 15, 0.7); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255,255,255,0.1); z-index: 10; flex-shrink: 0; }
+    .header { display: flex; justify-content: center; gap: 15px; padding: 12px 0; }
+    .co-btn { background: rgba(20,20,30,0.8); color: #aaa; padding: 8px 18px; border-radius: 20px; border: 1px solid transparent; cursor: pointer; font-weight: bold; transition: 0.3s; }
+    .co-btn.active { color: #fff; background: rgba(0,30,50,0.9); border-color: #0ff; box-shadow: 0 0 15px #0ff; }
+    .models-container { display: flex; overflow-x: auto; padding: 10px; gap: 10px; justify-content: center; }
+    .models-container::-webkit-scrollbar { display: none; }
+    .model-btn { background: rgba(30,30,40,0.8); color: #888; padding: 6px 14px; border-radius: 15px; border: 1px solid #444; font-size: 13px; cursor: pointer; white-space: nowrap; }
+    .model-btn.active { color: #fff; border-color: #f0f; box-shadow: 0 0 15px #f0f; background: rgba(50,0,50,0.9); }
+
+    .chat-wrapper { flex: 1; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+    .chat-container { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 20px; scroll-behavior: smooth; }
+    
+    .message { max-width: 85%; position: relative; padding: 12px 18px; border-radius: 15px; font-size: 15px; line-height: 1.6; word-wrap: break-word; }
+    .message.user { align-self: flex-start; background: rgba(30,20,0,0.8); border: 1px solid #ffa500; border-radius: 15px 15px 5px 15px; box-shadow: 0 0 10px rgba(255,165,0,0.5); }
+    .message.ai { align-self: flex-end; background: rgba(0,10,20,0.8); border: 1px solid #0ff; border-radius: 15px 15px 15px 5px; box-shadow: 0 0 10px rgba(0,255,255,0.5); }
+    .message img, .message video { max-width: 100%; border-radius: 10px; margin-top: 10px; border: 1px solid #444; }
+    
+    .typing-indicator { color: #0ff; text-align: center; font-size: 13px; padding: 5px; display: none; animation: pulse 1s infinite; }
+    @keyframes pulse { 0% { opacity: 0.5; } 100% { opacity: 1; } }
+
+    .input-area-container { padding: 10px; padding-bottom: calc(10px + var(--safe-bottom)); background: rgba(5,5,8,0.95); border-top: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; z-index: 20; }
+    .image-preview-area { display: none; padding: 5px; background: #111; border-radius: 10px; margin-bottom: 5px; position: relative; width: fit-content; }
+    .image-preview-area img { height: 50px; border-radius: 5px; }
+    .remove-img-btn { position: absolute; top: -5px; right: -5px; background: red; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 12px; }
+
+    .input-row { display: flex; align-items: center; width: 100%; gap: 8px; }
+    .input-wrapper { flex: 1; padding: 2px; border-radius: 20px; background: linear-gradient(45deg, red, blue, green); background-size: 400%; animation: glowingInput 4s infinite; display: flex; }
+    @keyframes glowingInput { 0% { background-position: 0 0; } 50% { background-position: 400% 0; } 100% { background-position: 0 0; } }
+    .input-box { flex: 1; background: #0a0a0f; color: #fff; padding: 12px; border-radius: 18px; border: none; outline: none; }
+    .action-btn { background: #111; color: #fff; border: 1px solid #444; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; font-size: 18px; }
+    .send-btn { background: #003300; border-color: #0f0; color: #0f0; }
+
+    .attach-menu { position: absolute; bottom: 80px; right: 10px; background: rgba(10,10,15,0.98); border: 1px solid #333; border-radius: 15px; display: none; flex-direction: column; min-width: 220px; z-index: 100; }
+    .attach-menu button { background: none; border: none; color: #ddd; padding: 12px; text-align: right; cursor: pointer; border-bottom: 1px solid #222; font-size: 14px; }
+    
+    .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.8); border: 1px solid #0ff; color: #fff; padding: 8px 15px; border-radius: 15px; display: none; z-index: 10000; font-weight: bold; }
+    .vid-check-btn { background: #004d00; color: #0f0; border: 1px solid #0f0; padding: 8px 15px; border-radius: 10px; cursor: pointer; margin-top: 10px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div id="edgeLighting" class="edge-lighting"></div>
+  <div id="toast" class="toast">إشعار</div>
+
+  <div class="glass-panel">
+    <div class="header">
+      <button class="co-btn active" data-company="google">Google</button>
+      <button class="co-btn" data-company="openai">OpenAI/Meta</button>
+    </div>
+    <div class="models-container" id="modelButtons"></div>
+  </div>
+
+  <div class="chat-wrapper">
+    <div class="chat-container" id="chatContainer"></div>
+  </div>
+  
+  <div id="typingIndicator" class="typing-indicator">الذكاء الاصطناعي يحلل البيانات... ⏳</div>
+
+  <div class="input-area-container">
+    <div id="imagePreviewArea" class="image-preview-area">
+        <img id="previewImg" src="">
+        <button class="remove-img-btn" onclick="removeImage()">✖</button>
+    </div>
+
+    <div class="input-row">
+        <button id="attachBtn" class="action-btn">➕</button>
+        <div class="input-wrapper">
+            <input type="text" id="userInput" class="input-box" placeholder="اكتب رسالتك أو أوامر (/image, /video)..." autocomplete="off">
+        </div>
+        <button id="sendBtn" class="action-btn send-btn">➤</button>
+    </div>
+
+    <div id="attachMenu" class="attach-menu">
+      <button onclick="document.getElementById('fileCamera').click()">📷 إرفاق صورة</button>
+      <button onclick="document.getElementById('fileGallery').click()">🖼️ إرفاق من المعرض</button>
+      <button id="btnGenImage">🎨 توليد صورة (DALL-E 3)</button>
+      <button id="btnGenVideo">🎞️ توليد فيديو (Replicate)</button>
+      <button onclick="clearChat()">🗑️ مسح الذاكرة</button>
+    </div>
+    
+    <input type="file" id="fileCamera" accept="image/*" capture="environment" style="display: none;">
+    <input type="file" id="fileGallery" accept="image/*" style="display: none;">
+  </div>
+
+  <script>
+    const AI_COMPANIES = {
+      'google': [ { id: 'g_25_flash', name: 'Gemini 2.5 Flash' }, { id: 'g_25_pro', name: 'Gemini 2.5 Pro' } ],
+      'openai': [ { id: 'o_4o', name: 'GPT-4o' }, { id: 'o_mini', name: 'GPT-4o Mini' } ]
+    };
+
+    let currentCompany = 'google';
+    let currentModelId = 'g_25_flash';
+    let chatHistory = JSON.parse(localStorage.getItem('nexus_v100_pro')) || [];
+    let currentBase64Image = null;
+
+    function renderModels() {
+      const container = document.getElementById('modelButtons');
+      container.innerHTML = '';
+      AI_COMPANIES[currentCompany].forEach(model => {
+        const btn = document.createElement('button');
+        btn.className = `model-btn ${model.id === currentModelId ? 'active' : ''}`;
+        btn.innerText = model.name;
+        btn.onclick = () => { currentModelId = model.id; renderModels(); };
+        container.appendChild(btn);
+      });
+    }
+
+    document.querySelectorAll('.co-btn').forEach(btn => {
+      btn.onclick = function() {
+        document.querySelectorAll('.co-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        currentCompany = this.getAttribute('data-company');
+        currentModelId = AI_COMPANIES[currentCompany][0].id;
+        renderModels();
+      };
+    });
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.innerText = msg; toast.style.display = 'block';
+      setTimeout(() => toast.style.display = 'none', 2500);
+    }
+
+    // --- حفظ الذاكرة بأمان (بدون صور لتوفير المساحة) ---
+    function saveHistorySafely() {
+      const safeHistory = chatHistory.map(msg => {
+          if (msg.image) return { ...msg, image: null, content: msg.content + '\n*[تم إرفاق صورة]*' };
+          return msg;
+      });
+      localStorage.setItem('nexus_v100_pro', JSON.stringify(safeHistory.slice(-30)));
+    }
+
+    // --- ضغط الصور وحمايتها ---
+    function resizeAndConvertImage(file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const MAX_WIDTH = 600; 
+                const scaleSize = Math.min(MAX_WIDTH / img.width, 1);
+                canvas.width = img.width * scaleSize;
+                canvas.height = img.height * scaleSize;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                
+                currentBase64Image = canvas.toDataURL('image/jpeg', 0.6);
+                
+                if (currentBase64Image.length > 1.5 * 1024 * 1024) {
+                    showToast("⚠️ الصورة لا تزال كبيرة جداً.");
+                    return;
+                }
+                
+                document.getElementById('previewImg').src = currentBase64Image;
+                document.getElementById('imagePreviewArea').style.display = 'block';
+            }
+            img.src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+    }
+
+    document.getElementById('fileCamera').addEventListener('change', (e) => { if(e.target.files[0]) resizeAndConvertImage(e.target.files[0]); });
+    document.getElementById('fileGallery').addEventListener('change', (e) => { if(e.target.files[0]) resizeAndConvertImage(e.target.files[0]); });
+    function removeImage() { currentBase64Image = null; document.getElementById('imagePreviewArea').style.display = 'none'; document.getElementById('fileCamera').value = ''; }
+
+    // --- المرفقات الخاصة ---
+    document.getElementById('btnGenImage').onclick = () => { document.getElementById('userInput').value = "/image "; document.getElementById('attachMenu').style.display = 'none'; document.getElementById('userInput').focus(); };
+    document.getElementById('btnGenVideo').onclick = () => { document.getElementById('userInput').value = "/video "; document.getElementById('attachMenu').style.display = 'none'; document.getElementById('userInput').focus(); };
+    
+    function clearChat() {
+      if(confirm("مسح الذاكرة بالكامل؟")) { chatHistory = []; localStorage.removeItem('nexus_v100_pro'); renderChat(); showToast("تم التنظيف"); document.getElementById('attachMenu').style.display = 'none'; }
+    }
+
+    // --- فحص حالة الفيديو ---
+    window.checkVideoStatus = async function(videoId, btn) {
+        btn.innerText = "⏳ جاري الفحص...";
+        try {
+            const response = await fetch('/.netlify/functions/chat-api', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ model: currentModelId, message: `/check_video ${videoId}` })
+            });
+            const data = await response.json();
+            if (data.reply.includes("<video")) {
+                btn.parentElement.innerHTML = data.reply;
+            } else {
+                btn.innerText = "🔄 تحقق من النتيجة الآن (لا يزال يعالج)";
+                showToast("الفيديو لم يجهز بعد.");
+            }
+        } catch (e) {
+            btn.innerText = "🔄 حاول مرة أخرى";
+            showToast("خطأ في الاتصال.");
+        }
+    }
+
+    function renderChat() {
+      const container = document.getElementById('chatContainer');
+      container.innerHTML = '';
+      chatHistory.forEach((msg) => {
+        const div = document.createElement('div');
+        div.className = `message ${msg.role}`;
+        let htmlContent = typeof marked !== 'undefined' ? marked.parse(msg.content) : msg.content;
+        if (msg.image) htmlContent += `<br><img src="${msg.image}">`;
+        div.innerHTML = htmlContent;
+        container.appendChild(div);
+      });
+      container.scrollTop = container.scrollHeight;
+    }
+
+    // --- إرسال الطلب (مع حماية السبام والـ Streaming) ---
+    async function sendMessage() {
+      // حماية السبام (2 ثواني)
+      const lastMsgTime = localStorage.getItem('nexus_last_msg') || 0;
+      if (Date.now() - lastMsgTime < 2000) { showToast("⚠️ يرجى الانتظار قليلاً لتجنب الضغط."); return; }
+
+      const input = document.getElementById('userInput');
+      const text = input.value.trim();
+      if (!text && !currentBase64Image) return;
+
+      localStorage.setItem('nexus_last_msg', Date.now());
+
+      const userMsgData = { role: 'user', content: text, image: currentBase64Image };
+      chatHistory.push(userMsgData);
+      saveHistorySafely();
+      
+      input.value = '';
+      const sentImage = currentBase64Image;
+      removeImage();
+      renderChat();
+
+      document.getElementById('typingIndicator').style.display = 'block';
+      document.getElementById('edgeLighting').classList.add('intense');
+
+      try {
+        const response = await fetch('/.netlify/functions/chat-api', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            model: currentModelId, 
+            message: text,
+            imageBase64: sentImage,
+            history: chatHistory.slice(-10) 
+          })
+        });
+
+        const data = await response.json();
+        
+        const container = document.getElementById('chatContainer');
+        const aiDiv = document.createElement('div');
+        aiDiv.className = 'message ai';
+        container.appendChild(aiDiv);
+        
+        if (!response.ok) {
+            aiDiv.innerHTML = data.reply || "⚠️ خطأ في السيرفر";
+            aiDiv.style.borderColor = "red";
+        } else {
+            let i = 0;
+            const speed = 10; 
+            function typeWriter() {
+                if (i < data.reply.length) {
+                    aiDiv.innerHTML = marked.parse(data.reply.substring(0, i + 1) + "█");
+                    container.scrollTop = container.scrollHeight;
+                    i += 3; 
+                    setTimeout(typeWriter, speed);
+                } else {
+                    aiDiv.innerHTML = marked.parse(data.reply);
+                    chatHistory.push({ role: 'ai', content: data.reply });
+                    saveHistorySafely();
+                }
+            }
+            typeWriter();
+        }
+      } catch (error) {
+        showToast("فشل الاتصال بالسيرفر");
+      } finally {
+        document.getElementById('typingIndicator').style.display = 'none';
+        document.getElementById('edgeLighting').classList.remove('intense');
+      }
+    }
+
+    document.getElementById('sendBtn').onclick = sendMessage;
+    document.getElementById('userInput').addEventListener('keypress', e => { if(e.key === 'Enter') sendMessage(); });
+    document.getElementById('attachBtn').onclick = () => { const m = document.getElementById('attachMenu'); m.style.display = m.style.display === 'block' ? 'none' : 'block'; };
+
+    renderModels(); renderChat();
+  </script>
+</body>
+</html>
