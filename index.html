@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Nexus AI PRO - Ultimate V100</title>
+  <title>Nexus AI PRO - Ultimate V300 Cosmic</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
@@ -11,60 +11,101 @@
 
   <style>
     :root { --safe-bottom: env(safe-area-inset-bottom, 10px); }
-    html, body { margin: 0; padding: 0; width: 100vw; height: 100dvh; background: #030305; color: #fff; font-family: 'Cairo', sans-serif; overflow: hidden; display: flex; flex-direction: column; }
+    html, body { margin: 0; padding: 0; width: 100vw; height: 100dvh; background: #010103; color: #fff; font-family: 'Cairo', sans-serif; overflow: hidden; display: flex; flex-direction: column; }
     
-    .edge-lighting { position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 9999; box-shadow: inset 0 0 20px 5px rgba(255, 69, 0, 0.7); animation: fireBorder 4s infinite alternate; }
-    .edge-lighting.intense { box-shadow: inset 0 0 70px 30px rgba(0, 255, 255, 0.9), inset 0 0 20px 10px rgba(255, 0, 255, 0.8) !important; animation: intensePulse 0.3s infinite alternate !important; }
-    @keyframes fireBorder { 0% { box-shadow: inset 0 0 20px 5px rgba(255,0,0,0.8); } 50% { box-shadow: inset 0 0 25px 10px rgba(138,43,226,0.8); } 100% { box-shadow: inset 0 0 20px 5px rgba(0,250,154,0.8); } }
-    @keyframes intensePulse { 0% { opacity: 0.8; } 100% { opacity: 1; } }
+    /* Cosmic Background Particles */
+    .cosmic-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; background: radial-gradient(circle at center, #0a0a1a 0%, #000 100%); }
+    .star { position: absolute; background: white; border-radius: 50%; animation: twinkle infinite ease-in-out; }
+    @keyframes twinkle { 0%, 100% { opacity: 0.2; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 15px #fff, 0 0 25px #0ff; } }
 
-    .glass-panel { background: rgba(10, 10, 15, 0.7); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255,255,255,0.1); z-index: 10; flex-shrink: 0; }
+    /* --- ترقية V300: إضاءة الحواف الكونية المتطورة --- */
+    .edge-lighting { position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 9999; animation: cosmicBreath 5s infinite alternate ease-in-out; }
+    .edge-lighting.intense { 
+        box-shadow: inset 0 0 100px 40px rgba(0, 255, 255, 0.6), inset 0 0 50px 20px rgba(255, 0, 255, 0.5) !important; 
+        animation: intensePulse 0.4s infinite alternate !important; 
+    }
+    
+    @keyframes cosmicBreath { 
+        0% { box-shadow: inset 0 0 30px 5px rgba(255, 0, 128, 0.3), inset 0 0 15px 2px rgba(0, 255, 255, 0.2); } 
+        50% { box-shadow: inset 0 0 50px 15px rgba(138, 43, 226, 0.5), inset 0 0 30px 10px rgba(0, 250, 154, 0.3); } 
+        100% { box-shadow: inset 0 0 40px 10px rgba(0, 255, 255, 0.4), inset 0 0 20px 5px rgba(255, 165, 0, 0.2); } 
+    }
+    @keyframes intensePulse { 0% { opacity: 0.6; transform: scale(0.99); } 100% { opacity: 1; transform: scale(1); } }
+
+    /* Glass Panel & Header */
+    .glass-panel { background: rgba(10, 10, 15, 0.75); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.1); z-index: 10; flex-shrink: 0; box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); }
     .header { display: flex; justify-content: center; gap: 15px; padding: 12px 0; }
-    .co-btn { background: rgba(20,20,30,0.8); color: #aaa; padding: 8px 18px; border-radius: 20px; border: 1px solid transparent; cursor: pointer; font-weight: bold; transition: 0.3s; }
-    .co-btn.active { color: #fff; background: rgba(0,30,50,0.9); border-color: #0ff; box-shadow: 0 0 15px #0ff; }
+    .co-btn { background: rgba(20,20,30,0.8); color: #aaa; padding: 8px 18px; border-radius: 20px; border: 1px solid transparent; cursor: pointer; font-weight: bold; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .co-btn:hover { background: rgba(30,30,45,0.9); color: #ddd; transform: translateY(-2px); }
+    .co-btn.active { color: #fff; background: rgba(0,30,50,0.9); border-color: #0ff; box-shadow: 0 0 20px rgba(0, 255, 255, 0.4); transform: scale(1.05); }
+    
     .models-container { display: flex; overflow-x: auto; padding: 10px; gap: 10px; justify-content: center; }
     .models-container::-webkit-scrollbar { display: none; }
-    .model-btn { background: rgba(30,30,40,0.8); color: #888; padding: 6px 14px; border-radius: 15px; border: 1px solid #444; font-size: 13px; cursor: pointer; white-space: nowrap; }
-    .model-btn.active { color: #fff; border-color: #f0f; box-shadow: 0 0 15px #f0f; background: rgba(50,0,50,0.9); }
+    .model-btn { background: rgba(30,30,40,0.8); color: #888; padding: 6px 14px; border-radius: 15px; border: 1px solid #444; font-size: 13px; cursor: pointer; white-space: nowrap; transition: 0.3s; }
+    .model-btn.active { color: #fff; border-color: #f0f; box-shadow: 0 0 15px rgba(255, 0, 255, 0.5); background: rgba(50,0,50,0.9); }
 
-    .chat-wrapper { flex: 1; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+    /* Chat Area */
+    .chat-wrapper { flex: 1; position: relative; overflow: hidden; display: flex; flex-direction: column; z-index: 5; }
     .chat-container { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 20px; scroll-behavior: smooth; }
     
-    .message { max-width: 85%; position: relative; padding: 12px 18px; border-radius: 15px; font-size: 15px; line-height: 1.6; word-wrap: break-word; }
-    .message.user { align-self: flex-start; background: rgba(30,20,0,0.8); border: 1px solid #ffa500; border-radius: 15px 15px 5px 15px; box-shadow: 0 0 10px rgba(255,165,0,0.5); }
-    .message.ai { align-self: flex-end; background: rgba(0,10,20,0.8); border: 1px solid #0ff; border-radius: 15px 15px 15px 5px; box-shadow: 0 0 10px rgba(0,255,255,0.5); }
-    .message img, .message video { max-width: 100%; border-radius: 10px; margin-top: 10px; border: 1px solid #444; }
+    /* --- ترقية V300: إضاءة الرسائل --- */
+    .message { max-width: 85%; position: relative; padding: 12px 18px; border-radius: 15px; font-size: 15px; line-height: 1.7; word-wrap: break-word; animation: slideIn 0.3s ease-out; }
+    @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     
-    .typing-indicator { color: #0ff; text-align: center; font-size: 13px; padding: 5px; display: none; animation: pulse 1s infinite; }
-    @keyframes pulse { 0% { opacity: 0.5; } 100% { opacity: 1; } }
-
-    .input-area-container { padding: 10px; padding-bottom: calc(10px + var(--safe-bottom)); background: rgba(5,5,8,0.95); border-top: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; z-index: 20; }
-    .image-preview-area { display: none; padding: 5px; background: #111; border-radius: 10px; margin-bottom: 5px; position: relative; width: fit-content; }
-    .image-preview-area img { height: 50px; border-radius: 5px; }
-    .remove-img-btn { position: absolute; top: -5px; right: -5px; background: red; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 12px; }
-
-    .input-row { display: flex; align-items: center; width: 100%; gap: 8px; }
-    .input-wrapper { flex: 1; padding: 2px; border-radius: 20px; background: linear-gradient(45deg, red, blue, green); background-size: 400%; animation: glowingInput 4s infinite; display: flex; }
-    @keyframes glowingInput { 0% { background-position: 0 0; } 50% { background-position: 400% 0; } 100% { background-position: 0 0; } }
-    .input-box { flex: 1; background: #0a0a0f; color: #fff; padding: 12px; border-radius: 18px; border: none; outline: none; }
-    .action-btn { background: #111; color: #fff; border: 1px solid #444; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; font-size: 18px; }
-    .send-btn { background: #003300; border-color: #0f0; color: #0f0; }
-
-    .attach-menu { position: absolute; bottom: 80px; right: 10px; background: rgba(10,10,15,0.98); border: 1px solid #333; border-radius: 15px; display: none; flex-direction: column; min-width: 220px; z-index: 100; }
-    .attach-menu button { background: none; border: none; color: #ddd; padding: 12px; text-align: right; cursor: pointer; border-bottom: 1px solid #222; font-size: 14px; }
+    .message.user { align-self: flex-start; background: linear-gradient(135deg, rgba(40,25,0,0.9), rgba(20,10,0,0.8)); border: 1px solid #ffa500; border-radius: 15px 15px 5px 15px; box-shadow: 0 0 20px rgba(255, 165, 0, 0.4), inset 0 0 10px rgba(255, 165, 0, 0.2); }
+    .message.ai { align-self: flex-end; background: linear-gradient(135deg, rgba(0,20,40,0.9), rgba(0,10,20,0.8)); border: 1px solid #0ff; border-radius: 15px 15px 15px 5px; box-shadow: 0 0 20px rgba(0, 255, 255, 0.4), inset 0 0 10px rgba(0, 255, 255, 0.2); }
+    .message img, .message video { max-width: 100%; border-radius: 10px; margin-top: 10px; border: 1px solid #444; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
     
-    .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.8); border: 1px solid #0ff; color: #fff; padding: 8px 15px; border-radius: 15px; display: none; z-index: 10000; font-weight: bold; }
-    .vid-check-btn { background: #004d00; color: #0f0; border: 1px solid #0f0; padding: 8px 15px; border-radius: 10px; cursor: pointer; margin-top: 10px; font-weight: bold; }
+    /* Code Blocks */
+    pre { position: relative; background: #0d1117 !important; padding: 15px; border-radius: 10px; border: 1px solid #30363d; overflow-x: auto; margin: 10px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+    code { font-family: 'Courier New', Courier, monospace; }
+    .copy-btn { position: absolute; top: 5px; left: 5px; background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 12px; transition: 0.2s; }
+    .copy-btn:hover { background: rgba(255,255,255,0.3); box-shadow: 0 0 10px rgba(255,255,255,0.2); }
+
+    .typing-indicator { color: #0ff; text-align: center; font-size: 13px; padding: 5px; display: none; text-shadow: 0 0 15px #0ff; animation: pulse 1.5s infinite alternate; font-weight: bold; }
+    @keyframes pulse { 0% { opacity: 0.5; text-shadow: 0 0 5px #0ff; } 100% { opacity: 1; text-shadow: 0 0 20px #0ff, 0 0 30px #0ff; } }
+    .typing-cursor { color: #0ff; animation: blink 1s infinite; }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+    /* Input Area */
+    .input-area-container { padding: 12px; padding-bottom: calc(12px + var(--safe-bottom)); background: rgba(5,5,8,0.98); border-top: 1px solid rgba(0, 255, 255, 0.2); display: flex; flex-direction: column; z-index: 20; box-shadow: 0 -10px 30px rgba(0,0,0,0.8); }
+    .image-preview-area { display: none; padding: 5px; background: #111; border-radius: 10px; margin-bottom: 8px; position: relative; width: fit-content; border: 1px solid #0ff; box-shadow: 0 0 15px rgba(0,255,255,0.3); }
+    .image-preview-area img { height: 60px; border-radius: 5px; }
+    .remove-img-btn { position: absolute; top: -8px; right: -8px; background: #ff003c; color: white; border: 2px solid #fff; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; font-weight: bold; box-shadow: 0 0 10px #ff003c; }
+
+    .input-row { display: flex; align-items: flex-end; width: 100%; gap: 10px; }
+    .input-wrapper { flex: 1; padding: 2px; border-radius: 20px; background: linear-gradient(45deg, #ff003c, #00d2ff, #3a7bd5, #ff00ff); background-size: 400%; animation: glowingInput 6s infinite alternate; display: flex; transition: 0.3s; }
+    .input-wrapper:focus-within { box-shadow: 0 0 25px rgba(0, 210, 255, 0.6); }
+    @keyframes glowingInput { 0% { background-position: 0 0; } 100% { background-position: 100% 0; } }
+    
+    .input-box { flex: 1; background: #0a0a0f; color: #fff; padding: 14px 18px; border-radius: 18px; border: none; outline: none; font-size: 15px; font-family: 'Cairo', sans-serif; resize: none; overflow-y: hidden; min-height: 24px; max-height: 120px; }
+    
+    .action-btn { background: #111; color: #fff; border: 1px solid #444; width: 48px; height: 48px; border-radius: 50%; cursor: pointer; font-size: 20px; transition: 0.2s; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .action-btn:hover { background: #222; transform: scale(1.1); box-shadow: 0 0 10px rgba(255,255,255,0.2); }
+    .send-btn { background: linear-gradient(135deg, #004d00, #008000); border-color: #0f0; color: #fff; box-shadow: 0 0 15px rgba(0,255,0,0.4); }
+    .send-btn:hover { box-shadow: 0 0 25px rgba(0,255,0,0.7); }
+    .mic-btn { background: #1a0033; border-color: #a200ff; color: #d480ff; }
+    .mic-btn.recording { background: #ff0000; color: #fff; animation: micPulse 1s infinite; border-color: #ff0000; box-shadow: 0 0 20px red; }
+    @keyframes micPulse { 0% { transform: scale(1); box-shadow: 0 0 10px red; } 50% { transform: scale(1.15); box-shadow: 0 0 30px red; } 100% { transform: scale(1); box-shadow: 0 0 10px red; } }
+
+    .attach-menu { position: absolute; bottom: 90px; right: 10px; background: rgba(10,10,15,0.95); backdrop-filter: blur(15px); border: 1px solid #0ff; border-radius: 15px; display: none; flex-direction: column; min-width: 230px; z-index: 100; box-shadow: 0 10px 40px rgba(0,255,255,0.3); overflow: hidden; }
+    .attach-menu button { background: none; border: none; color: #eee; padding: 15px; text-align: right; cursor: pointer; border-bottom: 1px solid #222; font-size: 15px; font-family: 'Cairo'; transition: 0.2s; display: flex; align-items: center; gap: 10px; }
+    .attach-menu button:hover { background: rgba(0,255,255,0.15); padding-right: 20px; color: #0ff; text-shadow: 0 0 5px #0ff; }
+    .attach-menu button:last-child { border-bottom: none; }
+    
+    .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.9); border: 1px solid #0ff; color: #0ff; padding: 10px 20px; border-radius: 20px; display: none; z-index: 10000; font-weight: bold; box-shadow: 0 0 25px rgba(0,255,255,0.6); animation: slideDown 0.3s; }
+    @keyframes slideDown { from { top: -50px; opacity: 0; } to { top: 20px; opacity: 1; } }
   </style>
 </head>
 <body>
+  <div class="cosmic-bg" id="cosmicBg"></div>
   <div id="edgeLighting" class="edge-lighting"></div>
   <div id="toast" class="toast">إشعار</div>
 
   <div class="glass-panel">
     <div class="header">
-      <button class="co-btn active" data-company="google">Google</button>
-      <button class="co-btn" data-company="openai">OpenAI/Meta</button>
+      <button class="co-btn active" data-company="google">Google API</button>
+      <button class="co-btn" data-company="openai">Meta / OpenRouter</button>
     </div>
     <div class="models-container" id="modelButtons"></div>
   </div>
@@ -73,7 +114,7 @@
     <div class="chat-container" id="chatContainer"></div>
   </div>
   
-  <div id="typingIndicator" class="typing-indicator">الذكاء الاصطناعي يحلل البيانات... ⏳</div>
+  <div id="typingIndicator" class="typing-indicator">الكيان الكوني يحلل البيانات... 🌌⏳</div>
 
   <div class="input-area-container">
     <div id="imagePreviewArea" class="image-preview-area">
@@ -83,18 +124,19 @@
 
     <div class="input-row">
         <button id="attachBtn" class="action-btn">➕</button>
+        <button id="micBtn" class="action-btn mic-btn">🎤</button>
         <div class="input-wrapper">
-            <input type="text" id="userInput" class="input-box" placeholder="اكتب رسالتك أو أوامر (/image, /video)..." autocomplete="off">
+            <textarea id="userInput" class="input-box" placeholder="اكتب رسالتك، تحدث، أو استخدم /image و /video..." rows="1"></textarea>
         </div>
         <button id="sendBtn" class="action-btn send-btn">➤</button>
     </div>
 
     <div id="attachMenu" class="attach-menu">
-      <button onclick="document.getElementById('fileCamera').click()">📷 إرفاق صورة</button>
-      <button onclick="document.getElementById('fileGallery').click()">🖼️ إرفاق من المعرض</button>
+      <button onclick="document.getElementById('fileCamera').click()">📷 التقاط صورة</button>
+      <button onclick="document.getElementById('fileGallery').click()">🖼️ رفع من المعرض</button>
       <button id="btnGenImage">🎨 توليد صورة (DALL-E 3)</button>
       <button id="btnGenVideo">🎞️ توليد فيديو (Replicate)</button>
-      <button onclick="clearChat()">🗑️ مسح الذاكرة</button>
+      <button onclick="clearChat()" style="color: #ff4d4d;">🗑️ مسح الذاكرة الكونية</button>
     </div>
     
     <input type="file" id="fileCamera" accept="image/*" capture="environment" style="display: none;">
@@ -102,14 +144,39 @@
   </div>
 
   <script>
+    // --- إعداد الخلفية الكونية ---
+    function initCosmicBackground() {
+        const bg = document.getElementById('cosmicBg');
+        for(let i = 0; i < 70; i++) { // زيادة عدد النجوم قليلاً
+            let star = document.createElement('div');
+            star.className = 'star';
+            star.style.width = Math.random() * 3 + 'px';
+            star.style.height = star.style.width;
+            star.style.top = Math.random() * 100 + '%';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.animationDuration = (Math.random() * 4 + 1.5) + 's';
+            bg.appendChild(star);
+        }
+    }
+    initCosmicBackground();
+
+    // --- إعداد Marked.js مع Highlight.js لتلوين الأكواد ---
+    marked.setOptions({
+        highlight: function(code, lang) {
+            const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+            return hljs.highlight(code, { language }).value;
+        },
+        langPrefix: 'hljs language-'
+    });
+
     const AI_COMPANIES = {
-      'google': [ { id: 'g_25_flash', name: 'Gemini 2.5 Flash' }, { id: 'g_25_pro', name: 'Gemini 2.5 Pro' } ],
-      'openai': [ { id: 'o_4o', name: 'GPT-4o' }, { id: 'o_mini', name: 'GPT-4o Mini' } ]
+      'google': [ { id: 'g_25_flash', name: 'Gemini 2.5 Flash' }, { id: 'g_25_pro', name: 'Gemini 2.5 Pro' }, { id: 'g_15_pro', name: 'Gemini 1.5 Pro' } ],
+      'openai': [ { id: 'o_4o', name: 'Llama 3.3 70B (Fast)' }, { id: 'o_mini', name: 'Llama 3.1 8B' }, { id: 'github_4o', name: 'GPT-4o (GitHub Max)' } ]
     };
 
     let currentCompany = 'google';
     let currentModelId = 'g_25_flash';
-    let chatHistory = JSON.parse(localStorage.getItem('nexus_v100_pro')) || [];
+    let chatHistory = JSON.parse(localStorage.getItem('nexus_v100_pro_cosmic')) || [];
     let currentBase64Image = null;
 
     function renderModels() {
@@ -137,35 +204,33 @@
     function showToast(msg) {
       const toast = document.getElementById('toast');
       toast.innerText = msg; toast.style.display = 'block';
-      setTimeout(() => toast.style.display = 'none', 2500);
+      setTimeout(() => toast.style.display = 'none', 3000);
     }
 
-    // --- حفظ الذاكرة بأمان (بدون صور لتوفير المساحة) ---
     function saveHistorySafely() {
       const safeHistory = chatHistory.map(msg => {
-          if (msg.image) return { ...msg, image: null, content: msg.content + '\n*[تم إرفاق صورة]*' };
+          if (msg.image) return { ...msg, image: null, content: msg.content + '\n*[تم إرفاق واستنتاج صورة في الذاكرة]*' };
           return msg;
       });
-      localStorage.setItem('nexus_v100_pro', JSON.stringify(safeHistory.slice(-30)));
+      localStorage.setItem('nexus_v100_pro_cosmic', JSON.stringify(safeHistory.slice(-40)));
     }
 
-    // --- ضغط الصور وحمايتها ---
     function resizeAndConvertImage(file) {
         const reader = new FileReader();
         reader.onload = function(e) {
             const img = new Image();
             img.onload = function() {
                 const canvas = document.createElement('canvas');
-                const MAX_WIDTH = 600; 
+                const MAX_WIDTH = 800;
                 const scaleSize = Math.min(MAX_WIDTH / img.width, 1);
                 canvas.width = img.width * scaleSize;
                 canvas.height = img.height * scaleSize;
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                 
-                currentBase64Image = canvas.toDataURL('image/jpeg', 0.6);
+                currentBase64Image = canvas.toDataURL('image/jpeg', 0.7);
                 
-                if (currentBase64Image.length > 1.5 * 1024 * 1024) {
+                if (currentBase64Image.length > 2 * 1024 * 1024) {
                     showToast("⚠️ الصورة لا تزال كبيرة جداً.");
                     return;
                 }
@@ -182,33 +247,32 @@
     document.getElementById('fileGallery').addEventListener('change', (e) => { if(e.target.files[0]) resizeAndConvertImage(e.target.files[0]); });
     function removeImage() { currentBase64Image = null; document.getElementById('imagePreviewArea').style.display = 'none'; document.getElementById('fileCamera').value = ''; }
 
-    // --- المرفقات الخاصة ---
     document.getElementById('btnGenImage').onclick = () => { document.getElementById('userInput').value = "/image "; document.getElementById('attachMenu').style.display = 'none'; document.getElementById('userInput').focus(); };
     document.getElementById('btnGenVideo').onclick = () => { document.getElementById('userInput').value = "/video "; document.getElementById('attachMenu').style.display = 'none'; document.getElementById('userInput').focus(); };
     
     function clearChat() {
-      if(confirm("مسح الذاكرة بالكامل؟")) { chatHistory = []; localStorage.removeItem('nexus_v100_pro'); renderChat(); showToast("تم التنظيف"); document.getElementById('attachMenu').style.display = 'none'; }
+      if(confirm("تحذير: هل أنت متأكد من مسح الذاكرة الكونية للذكاء الاصطناعي؟")) { chatHistory = []; localStorage.removeItem('nexus_v100_pro_cosmic'); renderChat(); showToast("تم تنظيف الذاكرة الكونية 🌌"); document.getElementById('attachMenu').style.display = 'none'; }
     }
 
-    // --- فحص حالة الفيديو ---
-    window.checkVideoStatus = async function(videoId, btn) {
-        btn.innerText = "⏳ جاري الفحص...";
-        try {
-            const response = await fetch('/.netlify/functions/chat-api', {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ model: currentModelId, message: `/check_video ${videoId}` })
+    // --- وظيفة نسخ الكود المتقدمة ---
+    function addCopyButtons() {
+        document.querySelectorAll('pre').forEach((block) => {
+            if (block.querySelector('.copy-btn')) return;
+            const button = document.createElement('button');
+            button.className = 'copy-btn';
+            button.innerText = 'نسخ الكود';
+            block.appendChild(button);
+            
+            button.addEventListener('click', async () => {
+                const code = block.querySelector('code').innerText;
+                await navigator.clipboard.writeText(code);
+                button.innerText = 'تم النسخ! ✔';
+                button.style.background = '#0f0';
+                button.style.color = '#000';
+                button.style.fontWeight = 'bold';
+                setTimeout(() => { button.innerText = 'نسخ الكود'; button.style.background = 'rgba(255,255,255,0.1)'; button.style.color = '#fff'; button.style.fontWeight = 'normal'; }, 2000);
             });
-            const data = await response.json();
-            if (data.reply.includes("<video")) {
-                btn.parentElement.innerHTML = data.reply;
-            } else {
-                btn.innerText = "🔄 تحقق من النتيجة الآن (لا يزال يعالج)";
-                showToast("الفيديو لم يجهز بعد.");
-            }
-        } catch (e) {
-            btn.innerText = "🔄 حاول مرة أخرى";
-            showToast("خطأ في الاتصال.");
-        }
+        });
     }
 
     function renderChat() {
@@ -222,26 +286,62 @@
         div.innerHTML = htmlContent;
         container.appendChild(div);
       });
+      addCopyButtons();
       container.scrollTop = container.scrollHeight;
     }
 
-    // --- إرسال الطلب (مع حماية السبام والـ Streaming) ---
-    async function sendMessage() {
-      // حماية السبام (2 ثواني)
-      const lastMsgTime = localStorage.getItem('nexus_last_msg') || 0;
-      if (Date.now() - lastMsgTime < 2000) { showToast("⚠️ يرجى الانتظار قليلاً لتجنب الضغط."); return; }
+    // --- نظام الإدخال الصوتي (Voice Recognition) ---
+    const micBtn = document.getElementById('micBtn');
+    const inputField = document.getElementById('userInput');
+    let recognition;
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        recognition = new SpeechRecognition();
+        recognition.lang = 'ar-SA';
+        recognition.interimResults = true;
+        
+        recognition.onstart = function() { micBtn.classList.add('recording'); showToast("تحدث الآن... 🎤"); };
+        recognition.onresult = function(event) {
+            let finalTranscript = '';
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+                if (event.results[i].isFinal) finalTranscript += event.results[i][0].transcript;
+                else inputField.value = event.results[i][0].transcript;
+            }
+            if (finalTranscript) { inputField.value += finalTranscript + ' '; autoResize(); }
+        };
+        recognition.onerror = function(event) { micBtn.classList.remove('recording'); showToast("خطأ في الميكروفون."); };
+        recognition.onend = function() { micBtn.classList.remove('recording'); };
+        
+        micBtn.onclick = () => {
+            if (micBtn.classList.contains('recording')) recognition.stop();
+            else { inputField.value = ''; recognition.start(); }
+        };
+    } else {
+        micBtn.onclick = () => showToast("المتصفح لا يدعم التحدث الصوتي.");
+    }
 
-      const input = document.getElementById('userInput');
-      const text = input.value.trim();
+    // --- التمدد التلقائي لمربع النص ---
+    function autoResize() {
+        inputField.style.height = 'auto';
+        inputField.style.height = inputField.scrollHeight + 'px';
+    }
+    inputField.addEventListener('input', autoResize);
+
+    async function sendMessage() {
+      const lastMsgTime = localStorage.getItem('nexus_last_msg_time') || 0;
+      if (Date.now() - lastMsgTime < 2500) { showToast("⚠️ الخوادم الكونية تحتاج لثوانٍ للاستيعاب."); return; }
+
+      const text = inputField.value.trim();
       if (!text && !currentBase64Image) return;
 
-      localStorage.setItem('nexus_last_msg', Date.now());
+      localStorage.setItem('nexus_last_msg_time', Date.now());
 
       const userMsgData = { role: 'user', content: text, image: currentBase64Image };
       chatHistory.push(userMsgData);
       saveHistorySafely();
       
-      input.value = '';
+      inputField.value = '';
+      autoResize();
       const sentImage = currentBase64Image;
       removeImage();
       renderChat();
@@ -250,13 +350,13 @@
       document.getElementById('edgeLighting').classList.add('intense');
 
       try {
-        const response = await fetch('/.netlify/functions/chat-api', {
+        const response = await fetch('/api/chat-api', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
             model: currentModelId, 
             message: text,
             imageBase64: sentImage,
-            history: chatHistory.slice(-10) 
+            history: chatHistory.slice(-15)
           })
         });
 
@@ -268,27 +368,39 @@
         container.appendChild(aiDiv);
         
         if (!response.ok) {
-            aiDiv.innerHTML = data.reply || "⚠️ خطأ في السيرفر";
+            aiDiv.innerHTML = data.reply || "⚠️ صدع في الزمكان: الخادم لا يستجيب.";
             aiDiv.style.borderColor = "red";
+            aiDiv.style.boxShadow = "0 0 20px red";
         } else {
+            // --- تم إصلاح وتطوير نظام الكتابة التدريجية (Bug Fix) ---
+            // الآن لا ينهار الواجهة عند كتابة أكواد برمجية
             let i = 0;
             const speed = 10; 
-            function typeWriter() {
+            let rawText = "";
+            aiDiv.style.whiteSpace = "pre-wrap"; // للحفاظ على التنسيق أثناء الكتابة
+            
+            function safeTypeWriter() {
                 if (i < data.reply.length) {
-                    aiDiv.innerHTML = marked.parse(data.reply.substring(0, i + 1) + "█");
+                    rawText += data.reply.charAt(i);
+                    // عرض النص الخام مع مؤشر نابض أثناء الكتابة لمنع تعارض HTML
+                    aiDiv.innerHTML = rawText + "<span class='typing-cursor'>█</span>";
                     container.scrollTop = container.scrollHeight;
-                    i += 3; 
-                    setTimeout(typeWriter, speed);
+                    i++; 
+                    setTimeout(safeTypeWriter, speed);
                 } else {
+                    // بمجرد الانتهاء، يتم تطبيق تنسيق Markdown بالكامل بأمان
+                    aiDiv.style.whiteSpace = "normal";
                     aiDiv.innerHTML = marked.parse(data.reply);
+                    addCopyButtons();
                     chatHistory.push({ role: 'ai', content: data.reply });
                     saveHistorySafely();
+                    container.scrollTop = container.scrollHeight;
                 }
             }
-            typeWriter();
+            safeTypeWriter();
         }
       } catch (error) {
-        showToast("فشل الاتصال بالسيرفر");
+        showToast("فشل الاتصال بمصفوفة السيرفرات");
       } finally {
         document.getElementById('typingIndicator').style.display = 'none';
         document.getElementById('edgeLighting').classList.remove('intense');
@@ -296,8 +408,24 @@
     }
 
     document.getElementById('sendBtn').onclick = sendMessage;
-    document.getElementById('userInput').addEventListener('keypress', e => { if(e.key === 'Enter') sendMessage(); });
-    document.getElementById('attachBtn').onclick = () => { const m = document.getElementById('attachMenu'); m.style.display = m.style.display === 'block' ? 'none' : 'block'; };
+    inputField.addEventListener('keydown', e => { 
+        if(e.key === 'Enter' && !e.shiftKey) { 
+            e.preventDefault(); 
+            sendMessage(); 
+        } 
+    });
+    
+    document.getElementById('attachBtn').onclick = () => { 
+        const m = document.getElementById('attachMenu'); 
+        m.style.display = m.style.display === 'flex' ? 'none' : 'flex'; 
+    };
+    
+    // إخفاء القائمة عند النقر خارجها
+    document.addEventListener('click', (e) => {
+        if(!e.target.closest('#attachBtn') && !e.target.closest('#attachMenu')) {
+            document.getElementById('attachMenu').style.display = 'none';
+        }
+    });
 
     renderModels(); renderChat();
   </script>
