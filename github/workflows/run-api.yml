@@ -1,31 +1,87 @@
-Name: Run Chat API
+name: Run Chat API
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  build:
+  build-and-run:
     runs-on: ubuntu-latest
 
+    timeout-minutes: 30
+
     steps:
-    - name: Checkout repository code
-      uses: actions/checkout@v4
+      # سحب المشروع
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20' # تم تصحيح node-size إلى node-version
+      # تثبيت Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
 
-    - name: Install Dependencies
-      run: |
-        if [ -f package.json ]; then
-          npm install
-        fi
+      # تثبيت PM2 للتشغيل الاحترافي
+      - name: Install PM2
+        run: npm install -g pm2
 
-    - name: Run API Server
-      env:
-        GITHUB_KEY: ${{ secrets.GH_TOKEN }} 
-        GEMINI_API_KEY: ${{ secrets.GH_TOKEN }}
-      run: node api/chat-api.js
+      # تثبيت المكتبات
+      - name: Install Dependencies
+        run: |
+          if [ -f package.json ]; then
+            npm install
+          else
+            echo "package.json not found"
+            exit 1
+          fi
+
+      # التأكد من وجود الملف
+      - name: Verify API File
+        run: |
+          if [ ! -f api/chat-api.js ]; then
+            echo "api/chat-api.js not found"
+            exit 1
+          fi
+
+      # إنشاء ملف البيئة
+      - name: Create Environment File
+        run: |
+          cat <<EOF > .env
+          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+          GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
+          OPENROUTER_API_KEY=${{ secrets.OPENROUTER_API_KEY }}
+          GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}
+          PORT=3000
+          NODE_ENV=production
+          EOF
+
+      # تشغيل السيرفر عبر PM2
+      - name: Start API Server
+        run: |
+          pm2 start api/chat-api.js \
+            --name "quantum-chat-api" \
+            --time \
+            --restart-delay=5000 \
+            --max-memory-restart 1G
+
+          pm2 save
+
+      # عرض حالة السيرفر
+      - name: PM2 Status
+        run: pm2 status
+
+      # اختبار بسيط للسيرفر
+      - name: Health Check
+        run: |
+          sleep 10
+          curl -I http://localhost:3000 || true
+
+      # عرض اللوقات
+      - name: Show Logs
+        run: pm2 logs quantum-chat-api --lines 100
