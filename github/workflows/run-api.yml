@@ -1,9 +1,9 @@
-name: Run Chat API
+Name: Run Chat API
 
 on:
   push:
-    branches: [ main ] # يعمل تلقائياً عند أي تعديل على الكود
-  workflow_dispatch: # يتيح لك تشغيله يدوياً بضغطة زر
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -16,7 +16,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-size: '20'
+        node-version: '20' # تم تصحيح node-size إلى node-version
 
     - name: Install Dependencies
       run: |
@@ -26,7 +26,6 @@ jobs:
 
     - name: Run API Server
       env:
-        # هنا نقوم بربط المفتاح الذي أضفته في الصورة مع الكود
         GITHUB_KEY: ${{ secrets.GH_TOKEN }} 
-        GEMINI_API_KEY: ${{ secrets.GH_TOKEN }} # إذا كان نفس المفتاح للجميع
+        GEMINI_API_KEY: ${{ secrets.GH_TOKEN }}
       run: node api/chat-api.js
