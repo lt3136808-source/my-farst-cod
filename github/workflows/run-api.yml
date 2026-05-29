@@ -1,0 +1,32 @@
+name: Run Chat API
+
+on:
+  push:
+    branches: [ main ] # يعمل تلقائياً عند أي تعديل على الكود
+  workflow_dispatch: # يتيح لك تشغيله يدوياً بضغطة زر
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-size: '20'
+
+    - name: Install Dependencies
+      run: |
+        if [ -f package.json ]; then
+          npm install
+        fi
+
+    - name: Run API Server
+      env:
+        # هنا نقوم بربط المفتاح الذي أضفته في الصورة مع الكود
+        GITHUB_KEY: ${{ secrets.GH_TOKEN }} 
+        GEMINI_API_KEY: ${{ secrets.GH_TOKEN }} # إذا كان نفس المفتاح للجميع
+      run: node api/chat-api.js
